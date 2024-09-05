@@ -5,7 +5,23 @@
 <head>
 <meta charset="utf-8">
 <title>Blogs | Default Props Digital Agency | Web Development | Digital Marketing | Seo</title>
+ <!-- Google Tag Manager -->
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-MG9C23XXQP"></script>
+ <script>
+   window.dataLayer = window.dataLayer || [];
+   function gtag(){dataLayer.push(arguments);}
+   gtag('js', new Date());
+   gtag('config', 'G-MG9C23XXQP');
 
+   // Send a custom event automatically when the page loads
+   window.addEventListener('load', function() {
+	 gtag('event', 'page_load', {
+	   'event_category': 'Page Interaction',
+	   'event_label': 'Page Loaded'
+	 });
+   });
+ </script>
+ <!-- End Google Tag Manager -->
 <!-- Stylesheets -->
 <link href="assets/css/bootstrap.css" rel="stylesheet">
 <link href="assets/css/style.css" rel="stylesheet">
