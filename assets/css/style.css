@@ -1334,6 +1334,7 @@
 	position: relative;
 	z-index: 2;
 	padding: 110px 0px 70px;
+	overflow-x: hidden;
 }
 
 .steps-one .sec-title_title {
@@ -1379,6 +1380,8 @@
 	width: 930px;
 	height: 930px;
 	border-radius: 50%;
+	width: 100%;
+	overflow-x: hidden;
 }
 
 .steps-one .dots-layer .dot-one{
@@ -1389,6 +1392,7 @@
 	height: 8px;
 	border-radius: 50px;
 	background-color: var(--white-color);
+	
 }
 
 .steps-one .dots-layer .dot-two{

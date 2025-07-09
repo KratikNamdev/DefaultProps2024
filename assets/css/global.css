@@ -597,6 +597,7 @@ img{
 	display:inline-block;
     color: var(--white-color);
 	background-color: var(--main-color);
+	white-space: nowrap;
 }
 
 .btn-style-one:before{
