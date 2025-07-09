@@ -6,13 +6,13 @@
 	//Hide Loading Box (Preloader)
 	function handlePreloader() {
 		if ($('.loader-wrap').length) {
-			$('.loader-wrap').delay(600).fadeOut(600);
+			$('.loader-wrap').delay(100).fadeOut(100);
 		}
 	}
 
 	if ($('.preloader-close').length) {
 		$('.preloader-close').on('click', function () {
-			$('.loader-wrap').delay(600).fadeOut(600);
+			$('.loader-wrap').delay(100).fadeOut(100);
 		})
 	}
 	
