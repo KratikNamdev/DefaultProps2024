@@ -1,16 +1,11 @@
-/*! jQuery UI - v1.12.1 - 2016-09-14
-* http://jqueryui.com
-* Includes: widget.js, position.js, data.js, disable-selection.js, effect.js, effects/effect-blind.js, effects/effect-bounce.js, effects/effect-clip.js, effects/effect-drop.js, effects/effect-explode.js, effects/effect-fade.js, effects/effect-fold.js, effects/effect-highlight.js, effects/effect-puff.js, effects/effect-pulsate.js, effects/effect-scale.js, effects/effect-shake.js, effects/effect-size.js, effects/effect-slide.js, effects/effect-transfer.js, focusable.js, form-reset-mixin.js, jquery-1-7.js, keycode.js, labels.js, scroll-parent.js, tabbable.js, unique-id.js, widgets/accordion.js, widgets/autocomplete.js, widgets/button.js, widgets/checkboxradio.js, widgets/controlgroup.js, widgets/datepicker.js, widgets/dialog.js, widgets/draggable.js, widgets/droppable.js, widgets/menu.js, widgets/mouse.js, widgets/progressbar.js, widgets/resizable.js, widgets/selectable.js, widgets/selectmenu.js, widgets/slider.js, widgets/sortable.js, widgets/spinner.js, widgets/tabs.js, widgets/tooltip.js
-* Copyright jQuery Foundation and other contributors; Licensed MIT */
-
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
-		// AMD. Register as an anonymous module.
+	
 		define([ "jquery" ], factory );
 	} else {
 
-		// Browser globals
+		
 		factory( jQuery );
 	}
 }(function( $ ) {
@@ -18,22 +13,6 @@
 $.ui = $.ui || {};
 
 var version = $.ui.version = "1.12.1";
-
-
-/*!
- * jQuery UI Widget 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: Widget
-//>>group: Core
-//>>description: Provides a factory for creating stateful widgets with a common API.
-//>>docs: http://api.jqueryui.com/jQuery.widget/
-//>>demos: http://jqueryui.com/widget/
 
 
 
@@ -46,13 +25,13 @@ $.cleanData = ( function( orig ) {
 		for ( i = 0; ( elem = elems[ i ] ) != null; i++ ) {
 			try {
 
-				// Only trigger remove when necessary to save time
+			
 				events = $._data( elem, "events" );
 				if ( events && events.remove ) {
 					$( elem ).triggerHandler( "remove" );
 				}
 
-			// Http://bugs.jquery.com/ticket/8235
+			
 			} catch ( e ) {}
 		}
 		orig( elems );
@@ -62,8 +41,7 @@ $.cleanData = ( function( orig ) {
 $.widget = function( name, base, prototype ) {
 	var existingConstructor, constructor, basePrototype;
 
-	// ProxiedPrototype allows the provided prototype to remain unmodified
-	// so that it can be used as a mixin for multiple widgets (#8876)
+	
 	var proxiedPrototype = {};
 
 	var namespace = name.split( "." )[ 0 ];
@@ -88,36 +66,31 @@ $.widget = function( name, base, prototype ) {
 	existingConstructor = $[ namespace ][ name ];
 	constructor = $[ namespace ][ name ] = function( options, element ) {
 
-		// Allow instantiation without "new" keyword
+		
 		if ( !this._createWidget ) {
 			return new constructor( options, element );
 		}
 
-		// Allow instantiation without initializing for simple inheritance
-		// must use "new" keyword (the code above always passes args)
+		
 		if ( arguments.length ) {
 			this._createWidget( options, element );
 		}
 	};
 
-	// Extend with the existing constructor to carry over any static properties
+	
 	$.extend( constructor, existingConstructor, {
 		version: prototype.version,
 
-		// Copy the object used to create the prototype in case we need to
-		// redefine the widget later
+		
 		_proto: $.extend( {}, prototype ),
 
-		// Track widgets that inherit from this widget in case this widget is
-		// redefined after a widget inherits from it
+		
 		_childConstructors: []
 	} );
 
 	basePrototype = new base();
 
-	// We need to make the options hash a property directly on the new instance
-	// otherwise we'll modify the options hash on the prototype that we're
-	// inheriting from
+	
 	basePrototype.options = $.widget.extend( {}, basePrototype.options );
 	$.each( prototype, function( prop, value ) {
 		if ( !$.isFunction( value ) ) {
@@ -152,9 +125,7 @@ $.widget = function( name, base, prototype ) {
 	} );
 	constructor.prototype = $.widget.extend( basePrototype, {
 
-		// TODO: remove support for widgetEventPrefix
-		// always use the name + a colon as the prefix, e.g., draggable:start
-		// don't prefix for widgets that aren't DOM-based
+		
 		widgetEventPrefix: existingConstructor ? ( basePrototype.widgetEventPrefix || name ) : name
 	}, proxiedPrototype, {
 		constructor: constructor,
@@ -163,22 +134,17 @@ $.widget = function( name, base, prototype ) {
 		widgetFullName: fullName
 	} );
 
-	// If this widget is being redefined then we need to find all widgets that
-	// are inheriting from it and redefine all of them so that they inherit from
-	// the new version of this widget. We're essentially trying to replace one
-	// level in the prototype chain.
+	
 	if ( existingConstructor ) {
 		$.each( existingConstructor._childConstructors, function( i, child ) {
 			var childPrototype = child.prototype;
 
-			// Redefine the child widget using the same prototype that was
-			// originally used, but inherit from the new version of the base
+			
 			$.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor,
 				child._proto );
 		} );
 
-		// Remove the list of existing child constructors from the old constructor
-		// so the old child constructors can be garbage collected
+		
 		delete existingConstructor._childConstructors;
 	} else {
 		base._childConstructors.push( constructor );
@@ -228,8 +194,7 @@ $.widget.bridge = function( name, object ) {
 
 		if ( isMethodCall ) {
 
-			// If this is an empty collection, we need to have the instance method
-			// return undefined instead of the jQuery instance
+			
 			if ( !this.length && options === "instance" ) {
 				returnValue = undefined;
 			} else {
@@ -265,7 +230,7 @@ $.widget.bridge = function( name, object ) {
 			}
 		} else {
 
-			// Allow multiple hashes to be passed on init
+			
 			if ( args.length ) {
 				options = $.widget.extend.apply( null, [ options ].concat( args ) );
 			}
@@ -462,17 +427,10 @@ $.Widget.prototype = {
 				continue;
 			}
 
-			// We are doing this to create a new jQuery object because the _removeClass() call
-			// on the next line is going to destroy the reference to the current elements being
-			// tracked. We need to save a copy of this collection so that we can add the new classes
-			// below.
+		
 			elements = $( currentElements.get() );
 			this._removeClass( currentElements, classKey );
 
-			// We don't use _addClass() here, because that uses this.options.classes
-			// for generating the string of classes. We want to use the value passed in from
-			// _setOption(), this is the new value of the classes option which was passed to
-			// _setOption(). We pass this value directly to _classes().
 			elements.addClass( this._classes( {
 				element: elements,
 				keys: classKey,
@@ -485,7 +443,7 @@ $.Widget.prototype = {
 	_setOptionDisabled: function( value ) {
 		this._toggleClass( this.widget(), this.widgetFullName + "-disabled", null, !!value );
 
-		// If the widget is becoming disabled, then nothing is interactive
+		
 		if ( value ) {
 			this._removeClass( this.hoverable, null, "ui-state-hover" );
 			this._removeClass( this.focusable, null, "ui-state-focus" );
@@ -743,23 +701,6 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 var widget = $.widget;
 
 
-/*!
- * jQuery UI Position 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- *
- * http://api.jqueryui.com/position/
- */
-
-//>>label: Position
-//>>group: Core
-//>>description: Positions elements relative to other elements.
-//>>docs: http://api.jqueryui.com/position/
-//>>demos: http://jqueryui.com/position/
-
 
 ( function() {
 var cachedScrollbarWidth,
@@ -898,8 +839,6 @@ $.fn.position = function( options ) {
 	// Clone to reuse original targetOffset later
 	basePosition = $.extend( {}, targetOffset );
 
-	// Force my and at to have valid horizontal and vertical positions
-	// if a value is missing or invalid, it will be converted to center
 	$.each( [ "my", "at" ], function() {
 		var pos = ( options[ this ] || "" ).split( " " ),
 			horizontalOffset,
@@ -1231,19 +1170,6 @@ $.ui.position = {
 var position = $.ui.position;
 
 
-/*!
- * jQuery UI :data 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: :data Selector
-//>>group: Core
-//>>description: Selects elements which have data stored under the specified key.
-//>>docs: http://api.jqueryui.com/data-selector/
 
 
 var data = $.extend( $.expr[ ":" ], {
@@ -1260,21 +1186,7 @@ var data = $.extend( $.expr[ ":" ], {
 		}
 } );
 
-/*!
- * jQuery UI Disable Selection 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
 
-//>>label: disableSelection
-//>>group: Core
-//>>description: Disable selection of text content within the set of matched elements.
-//>>docs: http://api.jqueryui.com/disableSelection/
-
-// This file is deprecated
 
 
 var disableSelection = $.fn.extend( {
@@ -1296,56 +1208,29 @@ var disableSelection = $.fn.extend( {
 } );
 
 
-/*!
- * jQuery UI Effects 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: Effects Core
-//>>group: Effects
-// jscs:disable maximumLineLength
-//>>description: Extends the internal jQuery effects. Includes morphing and easing. Required by all other effects.
-// jscs:enable maximumLineLength
-//>>docs: http://api.jqueryui.com/category/effects-core/
-//>>demos: http://jqueryui.com/effect/
-
 
 
 var dataSpace = "ui-effects-",
 	dataSpaceStyle = "ui-effects-style",
 	dataSpaceAnimated = "ui-effects-animated",
 
-	// Create a local jQuery because jQuery Color relies on it and the
-	// global may not exist with AMD and a custom build (#10199)
+	
 	jQuery = $;
 
 $.effects = {
 	effect: {}
 };
 
-/*!
- * jQuery Color Animations v2.1.2
- * https://github.com/jquery/jquery-color
- *
- * Copyright 2014 jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- *
- * Date: Wed Jan 16 08:47:09 2013 -0600
- */
+
 ( function( jQuery, undefined ) {
 
 	var stepHooks = "backgroundColor borderBottomColor borderLeftColor borderRightColor " +
 		"borderTopColor color columnRuleColor outlineColor textDecorationColor textEmphasisColor",
 
-	// Plusequals test for += 100 -= 100
+	
 	rplusequals = /^([\-+])=\s*(\d+\.?\d*)/,
 
-	// A set of RE's that can match strings and generate color tuples.
+	
 	stringParsers = [ {
 			re: /rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(?:,\s*(\d?(?:\.\d+)?)\s*)?\)/,
 			parse: function( execResult ) {
@@ -2214,9 +2099,6 @@ $.fn.extend( {
 
 } )();
 
-/******************************************************************************/
-/*********************************** EFFECTS **********************************/
-/******************************************************************************/
 
 ( function() {
 
@@ -2290,9 +2172,7 @@ if ( $.uiBackCompat !== false ) {
 				},
 				active = document.activeElement;
 
-			// Support: Firefox
-			// Firefox incorrectly exposes anonymous content
-			// https://bugzilla.mozilla.org/show_bug.cgi?id=561664
+			
 			try {
 				active.id;
 			} catch ( e ) {
@@ -2477,10 +2357,7 @@ $.extend( $.effects, {
 			cssPosition = element.css( "position" ),
 			position = element.position();
 
-		// Lock in margins first to account for form elements, which
-		// will change margin if you explicitly set height
-		// see: http://jsfiddle.net/JZSMt/3/ https://bugs.webkit.org/show_bug.cgi?id=107380
-		// Support: Safari
+		
 		element.css( {
 			marginTop: element.css( "marginTop" ),
 			marginBottom: element.css( "marginBottom" ),
@@ -2650,9 +2527,7 @@ $.fn.extend( {
 				// Sentinel for duck-punching the :animated psuedo-selector
 				el.data( dataSpaceAnimated, true );
 
-				// Save effect mode for later use,
-				// we can't just call $.effects.mode again later,
-				// as the .show() below destroys the initial state
+				
 				modes.push( normalizedMode );
 
 				// See $.uiBackCompat inside of run() for removal of defaultMode in 1.13
@@ -2866,9 +2741,7 @@ $.fx.step.clip = function( fx ) {
 
 } )();
 
-/******************************************************************************/
-/*********************************** EASING ***********************************/
-/******************************************************************************/
+
 
 ( function() {
 
@@ -2978,20 +2851,7 @@ var effectsEffectBlind = $.effects.define( "blind", "hide", function( options, d
 } );
 
 
-/*!
- * jQuery UI Effects Bounce 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
 
-//>>label: Bounce Effect
-//>>group: Effects
-//>>description: Bounces an element horizontally or vertically n times.
-//>>docs: http://api.jqueryui.com/bounce-effect/
-//>>demos: http://jqueryui.com/effect/
 
 
 
@@ -3074,20 +2934,6 @@ var effectsEffectBounce = $.effects.define( "bounce", function( options, done ) 
 } );
 
 
-/*!
- * jQuery UI Effects Clip 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: Clip Effect
-//>>group: Effects
-//>>description: Clips the element on and off like an old TV.
-//>>docs: http://api.jqueryui.com/clip-effect/
-//>>demos: http://jqueryui.com/effect/
 
 
 
@@ -3125,20 +2971,7 @@ var effectsEffectClip = $.effects.define( "clip", "hide", function( options, don
 } );
 
 
-/*!
- * jQuery UI Effects Drop 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
 
-//>>label: Drop Effect
-//>>group: Effects
-//>>description: Moves an element in one direction and hides it at the same time.
-//>>docs: http://api.jqueryui.com/drop-effect/
-//>>demos: http://jqueryui.com/effect/
 
 
 
@@ -3179,23 +3012,6 @@ var effectsEffectDrop = $.effects.define( "drop", "hide", function( options, don
 	} );
 } );
 
-
-/*!
- * jQuery UI Effects Explode 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: Explode Effect
-//>>group: Effects
-// jscs:disable maximumLineLength
-//>>description: Explodes an element in all directions into n pieces. Implodes an element to its original wholeness.
-// jscs:enable maximumLineLength
-//>>docs: http://api.jqueryui.com/explode-effect/
-//>>demos: http://jqueryui.com/effect/
 
 
 
@@ -3277,20 +3093,6 @@ var effectsEffectExplode = $.effects.define( "explode", "hide", function( option
 } );
 
 
-/*!
- * jQuery UI Effects Fade 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: Fade Effect
-//>>group: Effects
-//>>description: Fades the element.
-//>>docs: http://api.jqueryui.com/fade-effect/
-//>>demos: http://jqueryui.com/effect/
 
 
 
@@ -3385,20 +3187,7 @@ var effectsEffectFold = $.effects.define( "fold", "hide", function( options, don
 } );
 
 
-/*!
- * jQuery UI Effects Highlight 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
 
-//>>label: Highlight Effect
-//>>group: Effects
-//>>description: Highlights the background of an element in a defined color for a custom duration.
-//>>docs: http://api.jqueryui.com/highlight-effect/
-//>>demos: http://jqueryui.com/effect/
 
 
 
@@ -3428,20 +3217,7 @@ var effectsEffectHighlight = $.effects.define( "highlight", "show", function( op
 } );
 
 
-/*!
- * jQuery UI Effects Size 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
 
-//>>label: Size Effect
-//>>group: Effects
-//>>description: Resize an element to a specified width and height.
-//>>docs: http://api.jqueryui.com/size-effect/
-//>>demos: http://jqueryui.com/effect/
 
 
 
@@ -3605,20 +3381,7 @@ var effectsEffectSize = $.effects.define( "size", function( options, done ) {
 } );
 
 
-/*!
- * jQuery UI Effects Scale 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
 
-//>>label: Scale Effect
-//>>group: Effects
-//>>description: Grows or shrinks an element and its content.
-//>>docs: http://api.jqueryui.com/scale-effect/
-//>>demos: http://jqueryui.com/effect/
 
 
 
@@ -3646,20 +3409,7 @@ var effectsEffectScale = $.effects.define( "scale", function( options, done ) {
 } );
 
 
-/*!
- * jQuery UI Effects Puff 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
 
-//>>label: Puff Effect
-//>>group: Effects
-//>>description: Creates a puff effect by scaling the element up and hiding it at the same time.
-//>>docs: http://api.jqueryui.com/puff-effect/
-//>>demos: http://jqueryui.com/effect/
 
 
 
@@ -3673,20 +3423,7 @@ var effectsEffectPuff = $.effects.define( "puff", "hide", function( options, don
 } );
 
 
-/*!
- * jQuery UI Effects Pulsate 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
 
-//>>label: Pulsate Effect
-//>>group: Effects
-//>>description: Pulsates an element n times by changing the opacity to zero and back.
-//>>docs: http://api.jqueryui.com/pulsate-effect/
-//>>demos: http://jqueryui.com/effect/
 
 
 
@@ -3723,20 +3460,6 @@ var effectsEffectPulsate = $.effects.define( "pulsate", "show", function( option
 } );
 
 
-/*!
- * jQuery UI Effects Shake 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: Shake Effect
-//>>group: Effects
-//>>description: Shakes an element horizontally or vertically n times.
-//>>docs: http://api.jqueryui.com/shake-effect/
-//>>demos: http://jqueryui.com/effect/
 
 
 
@@ -3783,20 +3506,7 @@ var effectsEffectShake = $.effects.define( "shake", function( options, done ) {
 } );
 
 
-/*!
- * jQuery UI Effects Slide 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
 
-//>>label: Slide Effect
-//>>group: Effects
-//>>description: Slides an element in and out of the viewport.
-//>>docs: http://api.jqueryui.com/slide-effect/
-//>>demos: http://jqueryui.com/effect/
 
 
 
@@ -3845,20 +3555,6 @@ var effectsEffectSlide = $.effects.define( "slide", "show", function( options, d
 } );
 
 
-/*!
- * jQuery UI Effects Transfer 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: Transfer Effect
-//>>group: Effects
-//>>description: Displays a transfer effect from one element to another.
-//>>docs: http://api.jqueryui.com/transfer-effect/
-//>>demos: http://jqueryui.com/effect/
 
 
 
@@ -3955,19 +3651,6 @@ var form = $.fn.form = function() {
 };
 
 
-/*!
- * jQuery UI Form Reset Mixin 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: Form Reset Mixin
-//>>group: Core
-//>>description: Refresh input widgets when their form is reset
-//>>docs: http://api.jqueryui.com/form-reset-mixin/
 
 
 
@@ -4018,28 +3701,7 @@ var formResetMixin = $.ui.formResetMixin = {
 };
 
 
-/*!
- * jQuery UI Support for jQuery core 1.7.x 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- *
- */
 
-//>>label: jQuery 1.7 Support
-//>>group: Core
-//>>description: Support version 1.7.x of jQuery core
-
-
-
-// Support: jQuery 1.7 only
-// Not a great way to check versions, but since we only support 1.7+ and only
-// need to detect <1.8, this is a simple check that should suffice. Checking
-// for "1.7." would be a bit safer, but the version string is 1.7, not 1.7.0
-// and we'll never reach 1.70.0 (if we do, we certainly won't be supporting
-// 1.7 anymore). See #11197 for why we're not using feature detection.
 if ( $.fn.jquery.substring( 0, 3 ) === "1.7" ) {
 
 	// Setters for .innerWidth(), .innerHeight(), .outerWidth(), .outerHeight()
@@ -4097,19 +3759,7 @@ if ( $.fn.jquery.substring( 0, 3 ) === "1.7" ) {
 }
 
 ;
-/*!
- * jQuery UI Keycode 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
 
-//>>label: Keycode
-//>>group: Core
-//>>description: Provide keycodes as keynames
-//>>docs: http://api.jqueryui.com/jQuery.ui.keyCode/
 
 
 var keycode = $.ui.keyCode = {
@@ -4143,19 +3793,6 @@ var escapeSelector = $.ui.escapeSelector = ( function() {
 } )();
 
 
-/*!
- * jQuery UI Labels 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: labels
-//>>group: Core
-//>>description: Find all the labels associated with a given input
-//>>docs: http://api.jqueryui.com/labels/
 
 
 
@@ -4167,9 +3804,7 @@ var labels = $.fn.labels = function() {
 		return this.pushStack( this[ 0 ].labels );
 	}
 
-	// Support: IE <= 11, FF <= 37, Android <= 2.3 only
-	// Above browsers do not support control.labels. Everything below is to support them
-	// as well as document fragments. control.labels does not work on document fragments
+	
 	labels = this.eq( 0 ).parents( "label" );
 
 	// Look for the label based on the id
@@ -4195,19 +3830,6 @@ var labels = $.fn.labels = function() {
 };
 
 
-/*!
- * jQuery UI Scroll Parent 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: scrollParent
-//>>group: Core
-//>>description: Get the closest ancestor element that is scrollable.
-//>>docs: http://api.jqueryui.com/scrollParent/
 
 
 
@@ -4230,19 +3852,6 @@ var scrollParent = $.fn.scrollParent = function( includeHidden ) {
 };
 
 
-/*!
- * jQuery UI Tabbable 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: :tabbable Selector
-//>>group: Core
-//>>description: Selects elements which can be tabbed to.
-//>>docs: http://api.jqueryui.com/tabbable-selector/
 
 
 
@@ -4255,19 +3864,6 @@ var tabbable = $.extend( $.expr[ ":" ], {
 } );
 
 
-/*!
- * jQuery UI Unique ID 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: uniqueId
-//>>group: Core
-//>>description: Functions to generate and remove uniqueId's
-//>>docs: http://api.jqueryui.com/uniqueId/
 
 
 
@@ -4294,25 +3890,7 @@ var uniqueId = $.fn.extend( {
 } );
 
 
-/*!
- * jQuery UI Accordion 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
 
-//>>label: Accordion
-//>>group: Widgets
-// jscs:disable maximumLineLength
-//>>description: Displays collapsible content panels for presenting information in a limited amount of space.
-// jscs:enable maximumLineLength
-//>>docs: http://api.jqueryui.com/accordion/
-//>>demos: http://jqueryui.com/accordion/
-//>>css.structure: ../../themes/base/core.css
-//>>css.structure: ../../themes/base/accordion.css
-//>>css.theme: ../../themes/base/theme.css
 
 
 
@@ -4921,23 +4499,7 @@ var safeActiveElement = $.ui.safeActiveElement = function( document ) {
 };
 
 
-/*!
- * jQuery UI Menu 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
 
-//>>label: Menu
-//>>group: Widgets
-//>>description: Creates nestable menus.
-//>>docs: http://api.jqueryui.com/menu/
-//>>demos: http://jqueryui.com/menu/
-//>>css.structure: ../../themes/base/core.css
-//>>css.structure: ../../themes/base/menu.css
-//>>css.theme: ../../themes/base/theme.css
 
 
 
@@ -4966,8 +4528,6 @@ var widgetsMenu = $.widget( "ui.menu", {
 	_create: function() {
 		this.activeMenu = this.element;
 
-		// Flag used to prevent firing of the click handler
-		// as the event bubbles up through nested menus
 		this.mouseHandled = false;
 		this.element
 			.uniqueId()
@@ -5004,8 +4564,7 @@ var widgetsMenu = $.widget( "ui.menu", {
 						// Redirect focus to the menu
 						this.element.trigger( "focus", [ true ] );
 
-						// If the active item is on the top level, let it stay active.
-						// Otherwise, blur the active item since it is no longer visible.
+						
 						if ( this.active && this.active.parents( ".ui-menu" ).length === 1 ) {
 							clearTimeout( this.timer );
 						}
@@ -5014,9 +4573,7 @@ var widgetsMenu = $.widget( "ui.menu", {
 			},
 			"mouseenter .ui-menu-item": function( event ) {
 
-				// Ignore mouse events while typeahead is active, see #10458.
-				// Prevents focusing the wrong item when typeahead causes a scroll while the mouse
-				// is over an item in the menu
+				
 				if ( this.previousFilter ) {
 					return;
 				}
@@ -5029,8 +4586,7 @@ var widgetsMenu = $.widget( "ui.menu", {
 					return;
 				}
 
-				// Remove ui-state-active class from siblings of the newly focused menu item
-				// to avoid a jump caused by adjacent elements both having a class with a border
+				
 				this._removeClass( target.siblings().children( ".ui-state-active" ),
 					null, "ui-state-active" );
 				this.focus( event, target );
@@ -5039,8 +4595,7 @@ var widgetsMenu = $.widget( "ui.menu", {
 			"mouseleave .ui-menu": "collapseAll",
 			focus: function( event, keepActiveItem ) {
 
-				// If there's already an active item, keep it active
-				// If not, activate the first item
+				
 				var item = this.active || this.element.find( this.options.items ).eq( 0 );
 
 				if ( !keepActiveItem ) {
@@ -6795,23 +6350,7 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 var widgetsCheckboxradio = $.ui.checkboxradio;
 
 
-/*!
- * jQuery UI Button 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
 
-//>>label: Button
-//>>group: Widgets
-//>>description: Enhances a form with themeable buttons.
-//>>docs: http://api.jqueryui.com/button/
-//>>demos: http://jqueryui.com/button/
-//>>css.structure: ../../themes/base/core.css
-//>>css.structure: ../../themes/base/button.css
-//>>css.theme: ../../themes/base/theme.css
 
 
 
@@ -6856,9 +6395,7 @@ $.widget( "ui.button", {
 			this.options.showLabel = true;
 		}
 
-		// We have to check the option again here even though we did in _getCreateOptions,
-		// because null may have been passed on init which would override what was set in
-		// _getCreateOptions
+		
 		if ( this.options.disabled == null ) {
 			this.options.disabled = this.element[ 0 ].disabled || false;
 		}
@@ -6943,8 +6480,7 @@ $.widget( "ui.button", {
 
 		this._attachIcon( position );
 
-		// If the icon is on top or bottom we need to add the ui-widget-icon-block class and remove
-		// the iconSpace if there is one.
+		
 		if ( displayBlock ) {
 			this._addClass( this.icon, null, "ui-widget-icon-block" );
 			if ( this.iconSpace ) {
@@ -6952,8 +6488,7 @@ $.widget( "ui.button", {
 			}
 		} else {
 
-			// Position is beginning or end so remove the ui-widget-icon-block class and add the
-			// space if it does not exist
+			
 			if ( !this.iconSpace ) {
 				this.iconSpace = $( "<span> </span>" );
 				this._addClass( this.iconSpace, "ui-button-icon-space" );
@@ -7161,26 +6696,7 @@ if ( $.uiBackCompat !== false ) {
 var widgetsButton = $.ui.button;
 
 
-// jscs:disable maximumLineLength
-/* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
-/*!
- * jQuery UI Datepicker 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
 
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: Datepicker
-//>>group: Widgets
-//>>description: Displays a calendar from an input or inline for selecting dates.
-//>>docs: http://api.jqueryui.com/datepicker/
-//>>demos: http://jqueryui.com/datepicker/
-//>>css.structure: ../../themes/base/core.css
-//>>css.structure: ../../themes/base/datepicker.css
-//>>css.theme: ../../themes/base/theme.css
 
 
 
@@ -7192,16 +6708,11 @@ function datepicker_getZindex( elem ) {
 	var position, value;
 	while ( elem.length && elem[ 0 ] !== document ) {
 
-		// Ignore z-index if position is set to a value where z-index is ignored by the browser
-		// This makes behavior of this function consistent across browsers
-		// WebKit always returns auto if the element is positioned
+		
 		position = elem.css( "position" );
 		if ( position === "absolute" || position === "relative" || position === "fixed" ) {
 
-			// IE returns 0 when zIndex is not specified
-			// other browsers return a string
-			// we ignore the case of nested elements with an explicit value of 0
-			// <div style="z-index: -10;"><div style="z-index: 0;"></div></div>
+			
 			value = parseInt( elem.css( "zIndex" ), 10 );
 			if ( !isNaN( value ) && value !== 0 ) {
 				return value;
@@ -7473,21 +6984,11 @@ $.extend( Datepicker.prototype, {
 			this._disableDatepicker( target );
 		}
 
-		// Set display:block in place of inst.dpDiv.show() which won't work on disconnected elements
-		// http://bugs.jqueryui.com/ticket/7552 - A Datepicker created on a detached div has zero height
+		
 		inst.dpDiv.css( "display", "block" );
 	},
 
-	/* Pop-up the date picker in a "dialog" box.
-	 * @param  input element - ignored
-	 * @param  date	string or Date - the initial date to display
-	 * @param  onSelect  function - the function to call when a date is selected
-	 * @param  settings  object - update the dialog date picker instance's settings (anonymous object)
-	 * @param  pos int[2] - coordinates for the dialog's position within the screen or
-	 *					event - with x/y coordinates or
-	 *					leave empty for default (screen centre)
-	 * @return the manager object
-	 */
+	
 	_dialogDatepicker: function( input, date, onSelect, settings, pos ) {
 		var id, browserWidth, browserHeight, scrollX, scrollY,
 			inst = this._dialogInst; // internal instance
@@ -7634,11 +7135,7 @@ $.extend( Datepicker.prototype, {
 		return false;
 	},
 
-	/* Retrieve the instance data for the target control.
-	 * @param  target  element - the target input field or division or span
-	 * @return  object - the associated instance data
-	 * @throws  error if a jQuery problem getting data
-	 */
+	
 	_getInst: function( target ) {
 		try {
 			return $.data( target, "datepicker" );
@@ -7648,15 +7145,6 @@ $.extend( Datepicker.prototype, {
 		}
 	},
 
-	/* Update or retrieve the settings for a date picker attached to an input field or division.
-	 * @param  target  element - the target input field or division or span
-	 * @param  name	object - the new settings to update or
-	 *				string - the name of the setting to change or retrieve,
-	 *				when retrieving also "all" for all instance settings or
-	 *				"defaults" for all global defaults
-	 * @param  value   any - the new value for the setting
-	 *				(omit if above is an object or to retrieve a value)
-	 */
 	_optionDatepicker: function( target, name, value ) {
 		var settings, date, minDate, maxDate,
 			inst = this._getInst( target );
@@ -7710,9 +7198,7 @@ $.extend( Datepicker.prototype, {
 		this._optionDatepicker( target, name, value );
 	},
 
-	/* Redraw the date picker attached to an input field or division.
-	 * @param  target  element - the target input field or division or span
-	 */
+	
 	_refreshDatepicker: function( target ) {
 		var inst = this._getInst( target );
 		if ( inst ) {
@@ -7720,10 +7206,7 @@ $.extend( Datepicker.prototype, {
 		}
 	},
 
-	/* Set the dates for a jQuery selection.
-	 * @param  target element - the target input field or division or span
-	 * @param  date	Date - the new date
-	 */
+	
 	_setDateDatepicker: function( target, date ) {
 		var inst = this._getInst( target );
 		if ( inst ) {
@@ -7733,11 +7216,7 @@ $.extend( Datepicker.prototype, {
 		}
 	},
 
-	/* Get the date(s) for the first entry in a jQuery selection.
-	 * @param  target element - the target input field or division or span
-	 * @param  noDefault boolean - true if no default date is to be used
-	 * @return Date - the current date
-	 */
+	
 	_getDateDatepicker: function( target, noDefault ) {
 		var inst = this._getInst( target );
 		if ( inst && !inst.inline ) {
@@ -7883,11 +7362,7 @@ $.extend( Datepicker.prototype, {
 		return true;
 	},
 
-	/* Pop-up the date picker for a given input field.
-	 * If false returned from beforeShow event handler do not show.
-	 * @param  input  element - the input field attached to the date picker or
-	 *					event - if triggered by focus
-	 */
+	
 	_showDatepicker: function( input ) {
 		input = input.target || input;
 		if ( input.nodeName.toLowerCase() !== "input" ) { // find from button/image trigger
@@ -8015,9 +7490,7 @@ $.extend( Datepicker.prototype, {
 		}
 	},
 
-	// #6694 - don't focus the input if it's already focused
-	// this breaks the change event in IE
-	// Support: IE and jQuery <1.9
+	
 	_shouldFocusInput: function( inst ) {
 		return inst.input && inst.input.is( ":visible" ) && !inst.input.is( ":disabled" ) && !inst.input.is( ":focus" );
 	},
@@ -9178,11 +8651,7 @@ $.extend( Datepicker.prototype, {
 	}
 } );
 
-/*
- * Bind hover events for datepicker elements.
- * Done via delegate so the binding only occurs once in the lifetime of the parent div.
- * Global datepicker_instActive, set by _updateDatepicker allows the handlers to find their way back to the active picker.
- */
+
 function datepicker_bindHover( dpDiv ) {
 	var selector = "button, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-calendar td a";
 	return dpDiv.on( "mouseout", selector, function() {
@@ -9221,10 +8690,7 @@ function datepicker_extendRemove( target, props ) {
 	return target;
 }
 
-/* Invoke the datepicker functionality.
-   @param  options  string - a command, optionally followed by additional parameters or
-					Object - settings for attaching new datepicker functionality
-   @return  jQuery object */
+
 $.fn.datepicker = function( options ) {
 
 	/* Verify an empty collection wasn't passed - Fixes #6976 */
@@ -9273,19 +8739,7 @@ var widgetsDatepicker = $.datepicker;
 // This file is deprecated
 var ie = $.ui.ie = !!/msie [\w.]+/.exec( navigator.userAgent.toLowerCase() );
 
-/*!
- * jQuery UI Mouse 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
 
-//>>label: Mouse
-//>>group: Widgets
-//>>description: Abstracts mouse-based interactions to assist in creating certain widgets.
-//>>docs: http://api.jqueryui.com/mouse/
 
 
 
@@ -9395,10 +8849,7 @@ var widgetsMouse = $.widget( "ui.mouse", {
 
 	_mouseMove: function( event ) {
 
-		// Only check for mouseups outside the document if you've moved inside the document
-		// at least once. This prevents the firing of mouseup in the case of IE<9, which will
-		// fire a mousemove event if content is placed under the cursor. See #7778
-		// Support: IE <9
+		
 		if ( this._mouseMoved ) {
 
 			// IE mouseup check - mouseup happened when mouse was out of window
@@ -9529,21 +8980,6 @@ var safeBlur = $.ui.safeBlur = function( element ) {
 };
 
 
-/*!
- * jQuery UI Draggable 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: Draggable
-//>>group: Interactions
-//>>description: Enables dragging functionality for any element.
-//>>docs: http://api.jqueryui.com/draggable/
-//>>demos: http://jqueryui.com/draggable/
-//>>css.structure: ../../themes/base/draggable.css
 
 
 
@@ -9731,12 +9167,10 @@ $.widget( "ui.draggable", $.ui.mouse, {
 			$.ui.ddmanager.prepareOffsets( this, event );
 		}
 
-		// Execute the drag once - this causes the helper not to be visible before getting its
-		// correct position
+		
 		this._mouseDrag( event, true );
 
-		// If the ddmanager is used for droppables, inform the manager that dragging has started
-		// (see #5003)
+		
 		if ( $.ui.ddmanager ) {
 			$.ui.ddmanager.dragStart( this, event );
 		}
@@ -9831,8 +9265,7 @@ $.widget( "ui.draggable", $.ui.mouse, {
 	_mouseUp: function( event ) {
 		this._unblockFrames();
 
-		// If the ddmanager is used for droppables, inform the manager that dragging has stopped
-		// (see #5003)
+		
 		if ( $.ui.ddmanager ) {
 			$.ui.ddmanager.dragStop( this, event );
 		}
@@ -9840,8 +9273,7 @@ $.widget( "ui.draggable", $.ui.mouse, {
 		// Only need to focus if the event occurred on the draggable itself, see #10527
 		if ( this.handleElement.is( event.target ) ) {
 
-			// The interaction is over; whether or not the click resulted in a drag,
-			// focus the element
+			
 			this.element.trigger( "focus" );
 		}
 
@@ -9892,9 +9324,7 @@ $.widget( "ui.draggable", $.ui.mouse, {
 				o.appendTo ) );
 		}
 
-		// Http://bugs.jqueryui.com/ticket/9446
-		// a helper function can return the original element
-		// which wouldn't have been set to relative in _create
+		
 		if ( helperIsFunction && helper[ 0 ] === this.element[ 0 ] ) {
 			this._setPositionRelative();
 		}
@@ -9945,13 +9375,7 @@ $.widget( "ui.draggable", $.ui.mouse, {
 		var po = this.offsetParent.offset(),
 			document = this.document[ 0 ];
 
-		// This is a special case where we need to modify a offset calculated on start, since the
-		// following happened:
-		// 1. The position of the helper is absolute, so it's position is calculated based on the
-		// next positioned parent
-		// 2. The actual offset parent is a child of the scroll parent, and the scroll parent isn't
-		// the document, which means that the scroll is included in the initial calculation of the
-		// offset of the parent, and never recalculated upon drag
+		
 		if ( this.cssPosition === "absolute" && this.scrollParent[ 0 ] !== document &&
 				$.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) {
 			po.left += this.scrollParent.scrollLeft();
@@ -10090,13 +9514,13 @@ $.widget( "ui.draggable", $.ui.mouse, {
 		return {
 			top: (
 
-				// The absolute mouse position
+				
 				pos.top	+
 
-				// Only for relative positioned nodes: Relative offset from element to offset parent
+				
 				this.offset.relative.top * mod +
 
-				// The offsetParent's offset without borders (offset + border)
+				
 				this.offset.parent.top * mod -
 				( ( this.cssPosition === "fixed" ?
 					-this.offset.scroll.top :
@@ -10136,12 +9560,7 @@ $.widget( "ui.draggable", $.ui.mouse, {
 			};
 		}
 
-		/*
-		 * - Position constraining -
-		 * Constrain the position to a mix of grid, containment.
-		 */
-
-		// If we are not dragging yet, we won't check for options
+		
 		if ( constrainPosition ) {
 			if ( this.containment ) {
 				if ( this.relativeContainer ) {
@@ -10292,9 +9711,7 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 			if ( sortable && !sortable.options.disabled ) {
 				draggable.sortables.push( sortable );
 
-				// RefreshPositions is called at drag start to refresh the containerCache
-				// which is used in drag. This ensures it's initialized and synchronized
-				// with any changes that might have happened on the page since initialization.
+				
 				sortable.refreshPositions();
 				sortable._trigger( "activate", event, uiSortable );
 			}
@@ -10317,9 +9734,6 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 				draggable.cancelHelperRemoval = true;
 				sortable.cancelHelperRemoval = false;
 
-				// Use _storedCSS To restore properties in the sortable,
-				// as this also handles revert (#9675) since the draggable
-				// may have modified them in unexpected ways (#8809)
 				sortable._storedCSS = {
 					position: sortable.placeholder.css( "position" ),
 					top: sortable.placeholder.css( "top" ),
@@ -10328,14 +9742,11 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 
 				sortable._mouseStop( event );
 
-				// Once drag has ended, the sortable should return to using
-				// its original helper, not the shared helper from draggable
+				
 				sortable.options.helper = sortable.options._helper;
 			} else {
 
-				// Prevent this Sortable from removing the helper.
-				// However, don't set the draggable to remove the helper
-				// either as another connected Sortable may yet handle the removal.
+				
 				sortable.cancelHelperRemoval = true;
 
 				sortable._trigger( "deactivate", event, uiSortable );
@@ -10374,8 +9785,7 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 
 			if ( innermostIntersecting ) {
 
-				// If it intersects, we use a little isOver variable and set it once,
-				// so that the move-in stuff gets fired only once.
+				
 				if ( !sortable.isOver ) {
 					sortable.isOver = 1;
 
@@ -10393,14 +9803,12 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 						return ui.helper[ 0 ];
 					};
 
-					// Fire the start events of the sortable with our passed browser event,
-					// and our own helper (so it doesn't create a new one)
+					
 					event.target = sortable.currentItem[ 0 ];
 					sortable._mouseCapture( event, true );
 					sortable._mouseStart( event, true, true );
 
-					// Because the browser event is way off the new appended portlet,
-					// modify necessary variables to reflect the changes
+					
 					sortable.offset.click.top = draggable.offset.click.top;
 					sortable.offset.click.left = draggable.offset.click.left;
 					sortable.offset.parent.left -= draggable.offset.parent.left -
@@ -10410,12 +9818,10 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 
 					draggable._trigger( "toSortable", event );
 
-					// Inform draggable that the helper is in a valid drop zone,
-					// used solely in the revert option to handle "valid/invalid".
+					
 					draggable.dropped = sortable.element;
 
-					// Need to refreshPositions of all sortables in the case that
-					// adding to one sortable changes the location of the other sortables (#9675)
+					
 					$.each( draggable.sortables, function() {
 						this.refreshPositions();
 					} );
@@ -10428,31 +9834,25 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 				if ( sortable.currentItem ) {
 					sortable._mouseDrag( event );
 
-					// Copy the sortable's position because the draggable's can potentially reflect
-					// a relative position, while sortable is always absolute, which the dragged
-					// element has now become. (#8809)
+					
 					ui.position = sortable.position;
 				}
 			} else {
 
-				// If it doesn't intersect with the sortable, and it intersected before,
-				// we fake the drag stop of the sortable, but make sure it doesn't remove
-				// the helper by using cancelHelperRemoval.
+				
 				if ( sortable.isOver ) {
 
 					sortable.isOver = 0;
 					sortable.cancelHelperRemoval = true;
 
-					// Calling sortable's mouseStop would trigger a revert,
-					// so revert must be temporarily false until after mouseStop is called.
+					
 					sortable.options._revert = sortable.options.revert;
 					sortable.options.revert = false;
 
 					sortable._trigger( "out", event, sortable._uiHash( sortable ) );
 					sortable._mouseStop( event, true );
 
-					// Restore sortable behaviors that were modfied
-					// when the draggable entered the sortable area (#9481)
+					
 					sortable.options.revert = sortable.options._revert;
 					sortable.options.helper = sortable.options._helper;
 
@@ -10460,8 +9860,7 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 						sortable.placeholder.remove();
 					}
 
-					// Restore and recalculate the draggable's offset considering the sortable
-					// may have modified them in unexpected ways. (#8809, #10669)
+					
 					ui.helper.appendTo( draggable._parent );
 					draggable._refreshOffsets( event );
 					ui.position = draggable._generatePosition( event, true );
@@ -10471,8 +9870,7 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 					// Inform draggable that the helper is no longer in a valid drop zone
 					draggable.dropped = false;
 
-					// Need to refreshPositions of all sortables just in case removing
-					// from one sortable changes the location of other sortables (#9675)
+					
 					$.each( draggable.sortables, function() {
 						this.refreshPositions();
 					} );
@@ -11944,23 +11342,6 @@ $.ui.plugin.add( "resizable", "grid", {
 var widgetsResizable = $.ui.resizable;
 
 
-/*!
- * jQuery UI Dialog 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: Dialog
-//>>group: Widgets
-//>>description: Displays customizable dialog windows.
-//>>docs: http://api.jqueryui.com/dialog/
-//>>demos: http://jqueryui.com/dialog/
-//>>css.structure: ../../themes/base/core.css
-//>>css.structure: ../../themes/base/dialog.css
-//>>css.theme: ../../themes/base/theme.css
 
 
 
@@ -12144,9 +11525,7 @@ $.widget( "ui.dialog", {
 
 		if ( !this.opener.filter( ":focusable" ).trigger( "focus" ).length ) {
 
-			// Hiding a focused element doesn't trigger blur in WebKit
-			// so in case we have nothing to focus on, explicitly blur the active element
-			// https://bugs.webkit.org/show_bug.cgi?id=47182
+			
 			$.ui.safeBlur( $.ui.safeActiveElement( this.document[ 0 ] ) );
 		}
 
@@ -12198,9 +11577,7 @@ $.widget( "ui.dialog", {
 		this._createOverlay();
 		this._moveToTop( null, true );
 
-		// Ensure the overlay is moved to the top with the dialog, but only when
-		// opening. The overlay shouldn't move after the dialog is open so that
-		// modeless dialogs opened after the modal dialog stack properly.
+		
 		if ( this.overlay ) {
 			this.overlay.css( "z-index", this.uiDialog.css( "z-index" ) - 1 );
 		}
@@ -12210,9 +11587,7 @@ $.widget( "ui.dialog", {
 			that._trigger( "focus" );
 		} );
 
-		// Track the dialog immediately upon openening in case a focus event
-		// somehow occurs outside of the dialog before an element inside the
-		// dialog is focused (#10152)
+		
 		this._makeFocusTarget();
 
 		this._trigger( "open" );
@@ -12220,13 +11595,7 @@ $.widget( "ui.dialog", {
 
 	_focusTabbable: function() {
 
-		// Set focus to the first match:
-		// 1. An element that was focused previously
-		// 2. First element inside the dialog matching [autofocus]
-		// 3. Tabbable element inside the content element
-		// 4. Tabbable element inside the buttonpane
-		// 5. The close button
-		// 6. The dialog itself
+		
 		var hasFocus = this._focusedElement;
 		if ( !hasFocus ) {
 			hasFocus = this.element.find( "[autofocus]" );
@@ -12258,9 +11627,7 @@ $.widget( "ui.dialog", {
 		event.preventDefault();
 		checkFocus.call( this );
 
-		// support: IE
-		// IE <= 8 doesn't prevent moving focus even with event.preventDefault()
-		// so we check again later
+
 		this._delay( checkFocus );
 	},
 
@@ -12269,7 +11636,7 @@ $.widget( "ui.dialog", {
 			.hide()
 			.attr( {
 
-				// Setting tabIndex makes the div focusable
+				
 				tabIndex: -1,
 				role: "dialog"
 			} )
@@ -12314,9 +11681,7 @@ $.widget( "ui.dialog", {
 			}
 		} );
 
-		// We assume that any existing aria-describedby attribute means
-		// that the dialog content is marked up properly
-		// otherwise we brute force the content as the description
+		
 		if ( !this.element.find( "[aria-describedby]" ).length ) {
 			this.uiDialog.attr( {
 				"aria-describedby": this.element.uniqueId().attr( "id" )
@@ -12333,9 +11698,7 @@ $.widget( "ui.dialog", {
 		this._on( this.uiDialogTitlebar, {
 			mousedown: function( event ) {
 
-				// Don't prevent click on close button (#8838)
-				// Focusing a dialog that is partially scrolled out of view
-				// causes the browser to scroll it into view, preventing the click event
+				
 				if ( !$( event.target ).closest( ".ui-dialog-titlebar-close" ) ) {
 
 					// Dialog isn't getting focus when dragging (#8063)
@@ -12344,9 +11707,7 @@ $.widget( "ui.dialog", {
 			}
 		} );
 
-		// Support: IE
-		// Use type="button" to prevent enter keypresses in textboxes from closing the
-		// dialog in IE (#9312)
+		
 		this.uiDialogTitlebarClose = $( "<button type='button'></button>" )
 			.button( {
 				label: $( "<a>" ).text( this.options.closeText ).html(),
@@ -12693,8 +12054,7 @@ $.widget( "ui.dialog", {
 
 	_size: function() {
 
-		// If the user has resized the dialog, the .ui-dialog and .ui-dialog-content
-		// divs will both have width and height set, so we need to reset them
+		
 		var nonContentHeight, minContentHeight, maxContentHeight,
 			options = this.options;
 
@@ -12774,8 +12134,7 @@ $.widget( "ui.dialog", {
 			return;
 		}
 
-		// We use a delay in case the overlay is created from an
-		// event that we're going to be cancelling (#2804)
+		
 		var isOpening = true;
 		this._delay( function() {
 			isOpening = false;
@@ -12783,9 +12142,7 @@ $.widget( "ui.dialog", {
 
 		if ( !this.document.data( "ui-dialog-overlays" ) ) {
 
-			// Prevent use of anchors and inputs
-			// Using _on() for an event handler shared across many instances is
-			// safe because the dialogs stack and must be closed in reverse order
+			
 			this._on( this.document, {
 				focusin: function( event ) {
 					if ( isOpening ) {
@@ -12832,8 +12189,7 @@ $.widget( "ui.dialog", {
 	}
 } );
 
-// DEPRECATED
-// TODO: switch return back to widget declaration at top of file when this is removed
+
 if ( $.uiBackCompat !== false ) {
 
 	// Backcompat for dialogClass option
@@ -12859,20 +12215,6 @@ if ( $.uiBackCompat !== false ) {
 var widgetsDialog = $.ui.dialog;
 
 
-/*!
- * jQuery UI Droppable 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: Droppable
-//>>group: Interactions
-//>>description: Enables drop targets for draggable elements.
-//>>docs: http://api.jqueryui.com/droppable/
-//>>demos: http://jqueryui.com/droppable/
 
 
 
@@ -13079,8 +12421,7 @@ $.widget( "ui.droppable", {
 		};
 	},
 
-	// Extension points just to make backcompat sane and avoid duplicating logic
-	// TODO: Remove in 1.13 along with call to it below
+	
 	_addHoverClass: function() {
 		this._addClass( "ui-droppable-hover" );
 	},
@@ -13147,9 +12488,7 @@ var intersect = $.ui.intersect = ( function() {
 	};
 } )();
 
-/*
-	This manager tracks offsets of draggables and droppables
-*/
+
 $.ui.ddmanager = {
 	current: null,
 	droppables: { "default": [] },
@@ -13223,8 +12562,7 @@ $.ui.ddmanager = {
 	},
 	dragStart: function( draggable, event ) {
 
-		// Listen for scrolling so that if the dragging causes scrolling the position of the
-		// droppables can be recalculated (see #5003)
+		
 		draggable.element.parentsUntil( "body" ).on( "scroll.droppable", function() {
 			if ( !draggable.options.refreshPositions ) {
 				$.ui.ddmanager.prepareOffsets( draggable, event );
@@ -13233,13 +12571,12 @@ $.ui.ddmanager = {
 	},
 	drag: function( draggable, event ) {
 
-		// If you have a highly dynamic page, you might try this option. It renders positions
-		// every time you move the mouse.
+		
 		if ( draggable.options.refreshPositions ) {
 			$.ui.ddmanager.prepareOffsets( draggable, event );
 		}
 
-		// Run through all droppables and check their positions based on specific tolerance options
+		
 		$.each( $.ui.ddmanager.droppables[ draggable.options.scope ] || [], function() {
 
 			if ( this.options.disabled || this.greedyChild || !this.visible ) {
@@ -13292,19 +12629,17 @@ $.ui.ddmanager = {
 	dragStop: function( draggable, event ) {
 		draggable.element.parentsUntil( "body" ).off( "scroll.droppable" );
 
-		// Call prepareOffsets one final time since IE does not fire return scroll events when
-		// overflow was caused by drag (see #5003)
+		
 		if ( !draggable.options.refreshPositions ) {
 			$.ui.ddmanager.prepareOffsets( draggable, event );
 		}
 	}
 };
 
-// DEPRECATED
-// TODO: switch return back to widget declaration at top of file when this is removed
+
 if ( $.uiBackCompat !== false ) {
 
-	// Backcompat for activeClass and hoverClass options
+	
 	$.widget( "ui.droppable", $.ui.droppable, {
 		options: {
 			hoverClass: false,
@@ -13340,25 +12675,6 @@ if ( $.uiBackCompat !== false ) {
 var widgetsDroppable = $.ui.droppable;
 
 
-/*!
- * jQuery UI Progressbar 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: Progressbar
-//>>group: Widgets
-// jscs:disable maximumLineLength
-//>>description: Displays a status indicator for loading state, standard percentage, and other progress indicators.
-// jscs:enable maximumLineLength
-//>>docs: http://api.jqueryui.com/progressbar/
-//>>demos: http://jqueryui.com/progressbar/
-//>>css.structure: ../../themes/base/core.css
-//>>css.structure: ../../themes/base/progressbar.css
-//>>css.theme: ../../themes/base/theme.css
 
 
 
@@ -13386,8 +12702,7 @@ var widgetsProgressbar = $.widget( "ui.progressbar", {
 
 		this.element.attr( {
 
-			// Only set static values; aria-valuenow and aria-valuemax are
-			// set inside _refreshValue()
+			
 			role: "progressbar",
 			"aria-valuemin": this.min
 		} );
@@ -13504,21 +12819,7 @@ var widgetsProgressbar = $.widget( "ui.progressbar", {
 } );
 
 
-/*!
- * jQuery UI Selectable 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
 
-//>>label: Selectable
-//>>group: Interactions
-//>>description: Allows groups of elements to be selected with the mouse.
-//>>docs: http://api.jqueryui.com/selectable/
-//>>demos: http://jqueryui.com/selectable/
-//>>css.structure: ../../themes/base/selectable.css
 
 
 
@@ -13799,25 +13100,6 @@ var widgetsSelectable = $.widget( "ui.selectable", $.ui.mouse, {
 } );
 
 
-/*!
- * jQuery UI Selectmenu 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: Selectmenu
-//>>group: Widgets
-// jscs:disable maximumLineLength
-//>>description: Duplicates and extends the functionality of a native HTML select element, allowing it to be customizable in behavior and appearance far beyond the limitations of a native select.
-// jscs:enable maximumLineLength
-//>>docs: http://api.jqueryui.com/selectmenu/
-//>>demos: http://jqueryui.com/selectmenu/
-//>>css.structure: ../../themes/base/core.css
-//>>css.structure: ../../themes/base/selectmenu.css, ../../themes/base/button.css
-//>>css.theme: ../../themes/base/theme.css
 
 
 
@@ -13946,9 +13228,6 @@ var widgetsSelectmenu = $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 				select: function( event, ui ) {
 					event.preventDefault();
 
-					// Support: IE8
-					// If the item was selected via a click, the text selection
-					// will be destroyed in IE
 					that._setSelection();
 
 					that._select( ui.item.data( "ui-selectmenu-item" ), event );
@@ -14021,7 +13300,7 @@ var widgetsSelectmenu = $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 
 		item = this._getSelectedItem();
 
-		// Update the menu to have the correct item focused
+		
 		this.menuInstance.focus( null, item );
 		this._setAria( item.data( "ui-selectmenu-item" ) );
 
@@ -14034,7 +13313,7 @@ var widgetsSelectmenu = $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 			return;
 		}
 
-		// If this is the first time the menu is being opened, render the items
+		
 		if ( !this._rendered ) {
 			this._refreshMenu();
 		} else {
@@ -14192,9 +13471,7 @@ var widgetsSelectmenu = $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 			this.range.select();
 		}
 
-		// Support: IE
-		// Setting the text selection kills the button focus in IE, but
-		// restoring the focus doesn't kill the selection.
+		
 		this.button.focus();
 	},
 
@@ -14213,7 +13490,7 @@ var widgetsSelectmenu = $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 
 	_buttonEvents: {
 
-		// Prevent text selection from being reset when interacting with the selectmenu (#10144)
+		
 		mousedown: function() {
 			var selection;
 
@@ -14383,9 +13660,7 @@ var widgetsSelectmenu = $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 	_toggleAttr: function() {
 		this.button.attr( "aria-expanded", this.isOpen );
 
-		// We can't use two _toggleClass() calls here, because we need to make sure
-		// we always remove classes first and add them second, otherwise if both classes have the
-		// same theme class, it will be removed after we add it.
+		
 		this._removeClass( this.button, "ui-selectmenu-button-" +
 			( this.isOpen ? "closed" : "open" ) )
 			._addClass( this.button, "ui-selectmenu-button-" +
@@ -14937,8 +14212,7 @@ var widgetsSlider = $.widget( "ui.slider", $.ui.mouse, {
 		this._toggleClass( null, "ui-state-disabled", !!value );
 	},
 
-	//internal value getter
-	// _value() returns value trimmed by min and max, aligned by step
+	
 	_value: function() {
 		var val = this.options.value;
 		val = this._trimAlignValue( val );
@@ -14946,9 +14220,7 @@ var widgetsSlider = $.widget( "ui.slider", $.ui.mouse, {
 		return val;
 	},
 
-	//internal values getter
-	// _values() returns array of values trimmed by min and max, aligned by step
-	// _values( index ) returns single value trimmed by min and max, aligned by step
+	
 	_values: function( index ) {
 		var val,
 			vals,
@@ -14961,8 +14233,7 @@ var widgetsSlider = $.widget( "ui.slider", $.ui.mouse, {
 			return val;
 		} else if ( this._hasMultipleValues() ) {
 
-			// .slice() creates a copy of the array
-			// this copy gets trimmed by min and max and then returned
+			
 			vals = this.options.values.slice();
 			for ( i = 0; i < vals.length; i += 1 ) {
 				vals[ i ] = this._trimAlignValue( vals[ i ] );
@@ -14974,7 +14245,7 @@ var widgetsSlider = $.widget( "ui.slider", $.ui.mouse, {
 		}
 	},
 
-	// Returns the step-aligned value that val is closest to, between (inclusive) min and max
+	
 	_trimAlignValue: function( val ) {
 		if ( val <= this._valueMin() ) {
 			return this._valueMin();
@@ -14990,8 +14261,7 @@ var widgetsSlider = $.widget( "ui.slider", $.ui.mouse, {
 			alignValue += ( valModStep > 0 ) ? step : ( -step );
 		}
 
-		// Since JavaScript has problems with large floats, round
-		// the final value to 5 digits after the decimal point (see #4124)
+		
 		return parseFloat( alignValue.toFixed( 5 ) );
 	},
 
@@ -15003,7 +14273,7 @@ var widgetsSlider = $.widget( "ui.slider", $.ui.mouse, {
 		max = aboveMin + min;
 		if ( max > this.options.max ) {
 
-			//If max is not divisible by step, rounding off may increase its value
+			
 			max -= step;
 		}
 		this.max = parseFloat( max.toFixed( this._precision() ) );
@@ -15201,21 +14471,7 @@ var widgetsSlider = $.widget( "ui.slider", $.ui.mouse, {
 } );
 
 
-/*!
- * jQuery UI Sortable 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
 
-//>>label: Sortable
-//>>group: Interactions
-//>>description: Enables items in a list to be sorted using the mouse.
-//>>docs: http://api.jqueryui.com/sortable/
-//>>demos: http://jqueryui.com/sortable/
-//>>css.structure: ../../themes/base/sortable.css
 
 
 
@@ -15338,7 +14594,7 @@ var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
 		//We have to refresh the items data once first
 		this._refreshItems( event );
 
-		//Find out if the clicked node (or one of its parents) is a actual item in this.items
+		
 		$( event.target ).parents().each( function() {
 			if ( $.data( this, that.widgetName + "-item" ) === that ) {
 				currentItem = $( this );
@@ -15376,28 +14632,22 @@ var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
 
 		this.currentContainer = this;
 
-		//We only need to call refreshPositions, because the refreshItems call has been moved to
-		// mouseCapture
+		
 		this.refreshPositions();
 
-		//Create and append the visible helper
+		
 		this.helper = this._createHelper( event );
 
-		//Cache the helper size
+		
 		this._cacheHelperProportions();
 
-		/*
-		 * - Position generation -
-		 * This block generates everything position related - it's the core of draggables.
-		 */
-
-		//Cache the margins of the original element
+	
 		this._cacheMargins();
 
-		//Get the next scrolling parent
+		
 		this.scrollParent = this.helper.scrollParent();
 
-		//The element's absolute position on the page minus margins
+		
 		this.offset = this.currentItem.offset();
 		this.offset = {
 			top: this.offset.top - this.margins.top,
@@ -15411,40 +14661,37 @@ var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
 			},
 			parent: this._getParentOffset(),
 
-			// This is a relative to absolute position minus the actual position calculation -
-			// only used for relative positioned helper
+			
 			relative: this._getRelativeOffset()
 		} );
 
-		// Only after we got the offset, we can change the helper's position to absolute
-		// TODO: Still need to figure out a way to make relative sorting possible
+		
 		this.helper.css( "position", "absolute" );
 		this.cssPosition = this.helper.css( "position" );
 
-		//Generate the original position
+		
 		this.originalPosition = this._generatePosition( event );
 		this.originalPageX = event.pageX;
 		this.originalPageY = event.pageY;
 
-		//Adjust the mouse offset relative to the helper if "cursorAt" is supplied
+		
 		( o.cursorAt && this._adjustOffsetFromHelper( o.cursorAt ) );
 
-		//Cache the former DOM position
+		
 		this.domPosition = {
 			prev: this.currentItem.prev()[ 0 ],
 			parent: this.currentItem.parent()[ 0 ]
 		};
 
-		// If the helper is not the original, hide the original so it's not playing any role during
-		// the drag, won't cause anything bad this way
+		
 		if ( this.helper[ 0 ] !== this.currentItem[ 0 ] ) {
 			this.currentItem.hide();
 		}
 
-		//Create the placeholder
+		
 		this._createPlaceholder();
 
-		//Set a containment if given in the options
+		
 		if ( o.containment ) {
 			this._setContainment();
 		}
@@ -15488,7 +14735,7 @@ var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
 			this._cacheHelperProportions();
 		}
 
-		//Post "activate" events to possible containers
+		
 		if ( !noActivation ) {
 			for ( i = this.containers.length - 1; i >= 0; i-- ) {
 				this.containers[ i ]._trigger( "activate", event, this._uiHash( this ) );
@@ -15508,8 +14755,7 @@ var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
 
 		this._addClass( this.helper, "ui-sortable-helper" );
 
-		// Execute the drag once - this causes the helper not to be visiblebefore getting its
-		// correct position
+		
 		this._mouseDrag( event );
 		return true;
 
@@ -15600,20 +14846,11 @@ var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
 				continue;
 			}
 
-			// Only put the placeholder inside the current Container, skip all
-			// items from other containers. This works because when moving
-			// an item from one container to another the
-			// currentContainer is switched before the placeholder is moved.
-			//
-			// Without this, moving items in "sub-sortables" can cause
-			// the placeholder to jitter between the outer and inner container.
 			if ( item.instance !== this.currentContainer ) {
 				continue;
 			}
 
-			// Cannot intersect with itself
-			// no useless actions that have been done before
-			// no action if the item moved is the parent of the item checked
+			
 			if ( itemElement !== this.currentItem[ 0 ] &&
 				this.placeholder[ intersection === 1 ? "next" : "prev" ]()[ 0 ] !== itemElement &&
 				!$.contains( this.placeholder[ 0 ], itemElement ) &&
@@ -16001,13 +15238,12 @@ var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
 
 	refreshPositions: function( fast ) {
 
-		// Determine whether items are being displayed horizontally
+		
 		this.floating = this.items.length ?
 			this.options.axis === "x" || this._isFloating( this.items[ 0 ].item ) :
 			false;
 
-		//This has to be redone because due to the item being moved out/into the offsetParent,
-		// the offsetParent's position will change
+		
 		if ( this.offsetParent && this.helper ) {
 			this.offset.parent = this._getParentOffset();
 		}
@@ -16017,7 +15253,7 @@ var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
 		for ( i = this.items.length - 1; i >= 0; i-- ) {
 			item = this.items[ i ];
 
-			//We ignore calculating positions of all connected containers when we're not over them
+			
 			if ( item.instance !== this.currentContainer && this.currentContainer &&
 					item.item[ 0 ] !== this.currentItem[ 0 ] ) {
 				continue;
@@ -16090,16 +15326,12 @@ var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
 				},
 				update: function( container, p ) {
 
-					// 1. If a className is set as 'placeholder option, we don't force sizes -
-					// the class is responsible for that
-					// 2. The option 'forcePlaceholderSize can be enabled to force it even if a
-					// class name is specified
+					
 					if ( className && !o.forcePlaceholderSize ) {
 						return;
 					}
 
-					//If the element doesn't have a actual height by itself (without styles coming
-					// from a stylesheet), it receives the inline height from the dragged item
+					
 					if ( !p.height() ) {
 						p.height(
 							that.currentItem.innerHeight() -
@@ -16188,8 +15420,6 @@ var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
 			}
 		} else {
 
-			// When entering a new container, we will find the item with the least distance and
-			// append our item near it
 			dist = 10000;
 			itemWithLeastDistance = null;
 			floating = innermostContainer.floating || this._isFloating( this.currentItem );
@@ -16311,21 +15541,14 @@ var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
 		this.offsetParent = this.helper.offsetParent();
 		var po = this.offsetParent.offset();
 
-		// This is a special case where we need to modify a offset calculated on start, since the
-		// following happened:
-		// 1. The position of the helper is absolute, so it's position is calculated based on the
-		// next positioned parent
-		// 2. The actual offset parent is a child of the scroll parent, and the scroll parent isn't
-		// the document, which means that the scroll is included in the initial calculation of the
-		// offset of the parent, and never recalculated upon drag
+		
 		if ( this.cssPosition === "absolute" && this.scrollParent[ 0 ] !== this.document[ 0 ] &&
 				$.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) {
 			po.left += this.scrollParent.scrollLeft();
 			po.top += this.scrollParent.scrollTop();
 		}
 
-		// This needs to be actually done for all browsers, since pageX/pageY includes this
-		// information with an ugly IE fix
+	
 		if ( this.offsetParent[ 0 ] === this.document[ 0 ].body ||
 				( this.offsetParent[ 0 ].tagName &&
 				this.offsetParent[ 0 ].tagName.toLowerCase() === "html" && $.ui.ie ) ) {
@@ -16472,19 +15695,13 @@ var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
 					this.scrollParent,
 				scrollIsRootNode = ( /(html|body)/i ).test( scroll[ 0 ].tagName );
 
-		// This is another very weird special case that only happens for relative elements:
-		// 1. If the css position is relative
-		// 2. and the scroll parent is the document or similar to the offset parent
-		// we have to refresh the relative offset during the scroll so there are no jumps
+		
 		if ( this.cssPosition === "relative" && !( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
 				this.scrollParent[ 0 ] !== this.offsetParent[ 0 ] ) ) {
 			this.offset.relative = this._getRelativeOffset();
 		}
 
-		/*
-		 * - Position constraining -
-		 * Constrain the position to a mix of grid, containment.
-		 */
+		
 
 		if ( this.originalPosition ) { //If we are not dragging yet, we won't check for options
 
@@ -16572,12 +15789,7 @@ var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
 			i.item[ 0 ].parentNode.insertBefore( this.placeholder[ 0 ],
 				( this.direction === "down" ? i.item[ 0 ] : i.item[ 0 ].nextSibling ) );
 
-		//Various things done here to improve the performance:
-		// 1. we create a setTimeout, that calls refreshPositions
-		// 2. on the instance, we have a counter variable, that get's higher after every append
-		// 3. on the local scope, we copy the counter variable, and check in the timeout,
-		// if it's still the same
-		// 4. this lets only the last addition to the timeout stack through
+		
 		this.counter = this.counter ? ++this.counter : 1;
 		var counter = this.counter;
 
@@ -16595,14 +15807,11 @@ var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
 
 		this.reverting = false;
 
-		// We delay all events that have to be triggered to after the point where the placeholder
-		// has been removed and everything else normalized again
+		
 		var i,
 			delayedTriggers = [];
 
-		// We first have to update the dom position of the actual currentItem
-		// Note: don't do it if the current item is already removed (by a user), or it gets
-		// reappended (see #4088)
+		
 		if ( !this._noFinalSort && this.currentItem.parent().length ) {
 			this.placeholder.before( this.currentItem );
 		}
@@ -16636,8 +15845,6 @@ var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
 			} );
 		}
 
-		// Check if the items Container has Changed and trigger appropriate
-		// events.
 		if ( this !== this.currentContainer ) {
 			if ( !noPropagation ) {
 				delayedTriggers.push( function( event ) {
@@ -16690,8 +15897,7 @@ var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
 			this._trigger( "beforeStop", event, this._uiHash() );
 		}
 
-		//$(this.placeholder[0]).remove(); would have been the jQuery way - unfortunately,
-		// it unbinds ALL events from the original node!
+		
 		this.placeholder[ 0 ].parentNode.removeChild( this.placeholder[ 0 ] );
 
 		if ( !this.cancelHelperRemoval ) {
@@ -16737,23 +15943,7 @@ var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
 } );
 
 
-/*!
- * jQuery UI Spinner 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
 
-//>>label: Spinner
-//>>group: Widgets
-//>>description: Displays buttons to easily input numbers via the keyboard or mouse.
-//>>docs: http://api.jqueryui.com/spinner/
-//>>demos: http://jqueryui.com/spinner/
-//>>css.structure: ../../themes/base/core.css
-//>>css.structure: ../../themes/base/spinner.css
-//>>css.theme: ../../themes/base/theme.css
 
 
 
@@ -16881,11 +16071,7 @@ $.widget( "ui.spinner", {
 		"mousedown .ui-spinner-button": function( event ) {
 			var previous;
 
-			// We never want the buttons to have focus; whenever the user is
-			// interacting with the spinner, the focus should be on the input.
-			// If the input is focused then this.previous is properly set from
-			// when the input first received focus. If the input is not focused
-			// then we need to set this.previous based on the value before spinning.
+			
 			previous = this.element[ 0 ] === $.ui.safeActiveElement( this.document[ 0 ] ) ?
 				this.previous : this.element.val();
 			function checkFocus() {
@@ -16894,9 +16080,7 @@ $.widget( "ui.spinner", {
 					this.element.trigger( "focus" );
 					this.previous = previous;
 
-					// support: IE
-					// IE sets focus asynchronously, so we need to check if focus
-					// moved off of the input because the user clicked on the button.
+					
 					this._delay( function() {
 						this.previous = previous;
 					} );
@@ -16907,10 +16091,7 @@ $.widget( "ui.spinner", {
 			event.preventDefault();
 			checkFocus.call( this );
 
-			// Support: IE
-			// IE doesn't prevent moving focus even with event.preventDefault()
-			// so we set a flag to know when we should ignore the blur event
-			// and check (again) if focus moved off of the input.
+			
 			this.cancelBlur = true;
 			this._delay( function() {
 				delete this.cancelBlur;
@@ -16939,9 +16120,7 @@ $.widget( "ui.spinner", {
 				.hasClass( "ui-spinner-up" ) ? 1 : -1, event );
 		},
 
-		// TODO: do we really want to consider this a stop?
-		// shouldn't we just stop the repeater and wait until mouseup before
-		// we trigger the stop event?
+		
 		"mouseleave .ui-spinner-button": "_stop"
 	},
 
@@ -17295,23 +16474,6 @@ if ( $.uiBackCompat !== false ) {
 var widgetsSpinner = $.ui.spinner;
 
 
-/*!
- * jQuery UI Tabs 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: Tabs
-//>>group: Widgets
-//>>description: Transforms a set of container elements into a tab structure.
-//>>docs: http://api.jqueryui.com/tabs/
-//>>demos: http://jqueryui.com/tabs/
-//>>css.structure: ../../themes/base/core.css
-//>>css.structure: ../../themes/base/tabs.css
-//>>css.theme: ../../themes/base/theme.css
 
 
 
@@ -17500,9 +16662,7 @@ $.widget( "ui.tabs", {
 		// Navigating with control/command key will prevent automatic activation
 		if ( !event.ctrlKey && !event.metaKey ) {
 
-			// Update aria-selected immediately so that AT think the tab is already selected.
-			// Otherwise AT may confuse the user by stating that they need to activate the tab,
-			// but the tab will already be activated by the time the announcement finishes.
+			
 			focusedTab.attr( "aria-selected", "false" );
 			this.tabs.eq( selectedIndex ).attr( "aria-selected", "true" );
 
@@ -17598,8 +16758,7 @@ $.widget( "ui.tabs", {
 		var options = this.options,
 			lis = this.tablist.children( ":has(a[href])" );
 
-		// Get disabled tabs from class attribute from HTML
-		// this will get converted to a boolean if needed in _refresh()
+		
 		options.disabled = $.map( lis.filter( ".ui-state-disabled" ), function( tab ) {
 			return lis.index( tab );
 		} );
@@ -18655,23 +17814,22 @@ $.widget( "ui.tooltip", {
 	_destroy: function() {
 		var that = this;
 
-		// Close open tooltips
+		
 		$.each( this.tooltips, function( id, tooltipData ) {
 
-			// Delegate to close method to handle common cleanup
+			
 			var event = $.Event( "blur" ),
 				element = tooltipData.element;
 			event.target = event.currentTarget = element[ 0 ];
 			that.close( event, true );
 
-			// Remove immediately; destroying an open tooltip doesn't use the
-			// hide animation
+			
 			$( "#" + id ).remove();
 
-			// Restore the title
+			
 			if ( element.data( "ui-tooltip-title" ) ) {
 
-				// If the title attribute has changed since open(), don't restore
+				
 				if ( !element.attr( "title" ) ) {
 					element.attr( "title", element.data( "ui-tooltip-title" ) );
 				}
@@ -18682,11 +17840,10 @@ $.widget( "ui.tooltip", {
 	}
 } );
 
-// DEPRECATED
-// TODO: Switch return back to widget declaration at top of file when this is removed
+
 if ( $.uiBackCompat !== false ) {
 
-	// Backcompat for tooltipClass option
+	
 	$.widget( "ui.tooltip", $.ui.tooltip, {
 		options: {
 			tooltipClass: null
