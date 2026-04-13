@@ -2152,7 +2152,9 @@
 	background: rgba(var(--color-seven-rgb), 0.50);
     background: linear-gradient(to bottom, rgba(var(--color-seven-rgb), 0.50) 0%, rgba(var(--white-color-rgb), 0) 100%);
 }
-
+.social_icon-box img{
+	width: 50px;
+}
 /*** 
 
 ====================================================================
